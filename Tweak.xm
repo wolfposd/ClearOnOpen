@@ -16,7 +16,7 @@
 
 @interface SPUISearchViewController : NSObject
 
-// called when view is showing
+// called when view is being dismissed
 - (void)_didFinishDismissing;
 
 // clear stuff
