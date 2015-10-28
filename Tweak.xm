@@ -17,7 +17,7 @@
 @interface SPUISearchViewController : NSObject
 
 // called when view is showing
-- (void)_didFinishPresenting;
+- (void)_didFinishDismissing;
 
 // clear stuff
 - (void)_clearSearchResults;
@@ -29,7 +29,7 @@
 
 %hook SPUISearchViewController
 
-- (void)_didFinishPresenting 
+- (void)_didFinishDismissing
 {
     [self _clearSearchResults];
     [self _searchFieldEditingChanged];
