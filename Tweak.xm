@@ -13,27 +13,106 @@
  //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
 
-
-@interface SPUISearchViewController : NSObject
-
-// called when view is being dismissed
-- (void)_didFinishDismissing;
-
-// clear stuff
-- (void)_clearSearchResults;
-- (void)_searchFieldEditingChanged;
-
-@end
+#import "headerIOS9.h"
+#import "headerIOS78.h"
+#import "headerIOS6.h"
 
 
+// =============================================================================
+//                                   iOS9
+// =============================================================================
+%group iOS9
 
-%hook SPUISearchViewController
+    %hook SPUISearchViewController
 
-- (void)_didFinishDismissing
+    - (void)_didFinishDismissing
+    {
+        [self _clearSearchResults];
+        [self _searchFieldEditingChanged];
+        %orig;
+    }
+
+    %end // hook SPUISearchViewController
+%end // group iOS9
+
+
+// =============================================================================
+//                                   iOS7+8
+// =============================================================================
+
+
+%group iOS7
+
+    %hook SBSearchViewController
+
+    - (void)searchGesture:(id)arg1 completedShowing:(BOOL)arg2 {
+        %orig;
+        if (!arg2) {
+            SBSearchHeader *h = MSHookIvar<SBSearchHeader *>(self, "_searchHeader");
+            if (h) {
+                [h searchField].text = @"";
+                [self _searchFieldEditingChanged];
+            }
+        }
+    }
+
+    %end // hook SBSearchViewController
+%end // group iOS7
+
+
+// =============================================================================
+//                                   iOS6
+// =============================================================================
+
+%group iOS6
+
+    static SBSearchController *sbSearchController;
+    %hook SBSearchController
+
+    - (id)init{
+        if ((self = %orig) != nil) {
+            //do stuff
+            sbSearchController = self;
+        }
+        return self;
+    }
+
+    %end // hook SBSearchController
+
+    %hook SBSearchView
+    //make search bar's text nil on init
+
+    - (void)addTableView
+    {
+        [self searchBar].text = nil;
+        //- (void)searchBar:(id)arg1 textDidChange:(id)arg2;
+        [sbSearchController searchBar:self textDidChange:nil];
+        //- (void)setShowsKeyboard:(BOOL)arg1 animated:(BOOL)arg2;
+        [self setShowsKeyboard:YES animated:YES];
+        %orig;
+    }
+    %end // hook SBSearchView
+%end // group iOS6
+
+
+// =============================================================================
+//                                   group initializer
+// =============================================================================
+
+
+%ctor 
 {
-    [self _clearSearchResults];
-    [self _searchFieldEditingChanged];
-    %orig;
+    float sysVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+    if(sysVersion >= 9.0)
+    {
+        %init(iOS9);
+    }
+    else if (sysVersion >= 7.0) 
+    {
+        %init(iOS7);
+    } 
+    else 
+    {
+        %init(iOS6);
+    }
 }
-
-%end
