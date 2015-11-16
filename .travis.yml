@@ -9,4 +9,6 @@ before_install:
   - brew install dpkg
   - brew install ldid
 
-install: make package
+install: echo "nothing"
+
+script: make package
