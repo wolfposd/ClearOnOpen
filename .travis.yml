@@ -4,8 +4,7 @@ os:
 
 before_install:
   - brew update
-  - brew outdated dpkg || brew upgrade dpkg
-  - brew outdated ldid || brew upgrade ldid
-
+  - brew install dpkg
+  - brew install ldid
 
 install: make package
