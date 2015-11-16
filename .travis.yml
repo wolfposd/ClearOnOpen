@@ -1,4 +1,5 @@
 #language: objective-c # can this be removed?
+language: c
 os:
   - osx
 
