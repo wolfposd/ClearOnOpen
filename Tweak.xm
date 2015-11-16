@@ -102,12 +102,11 @@
 
 %ctor 
 {
-    float sysVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
-    if(sysVersion >= 9.0)
+    if(kCFCoreFoundationVersionNumber > 1200) // iOS9
     {
         %init(iOS9);
     }
-    else if (sysVersion >= 7.0) 
+    else if (kCFCoreFoundationVersionNumber >= 847) // iOS7
     {
         %init(iOS7);
     } 
