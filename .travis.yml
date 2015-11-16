@@ -1,2 +1,11 @@
 language: objective-c
+os:
+  - osx
+
+before_install:
+  - brew update
+  - brew outdated dpkg-deb || brew upgrade dpkg-deb
+  - brew outdated ldid || brew upgrade ldid
+
+
 install: make package
