@@ -1,0 +1,14 @@
+#language: objective-c # can this be removed?
+language: c
+os:
+  - osx
+
+before_install:
+  - sh theos/git-submodule-recur.sh init
+  - brew update
+  - brew install dpkg
+  - brew install ldid
+
+install: true
+
+script: make package

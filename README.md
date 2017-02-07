@@ -2,6 +2,8 @@
 ios tweak to remove last spotlight search results
 
 
+Build status: [![Build Status](https://travis-ci.org/wolfposd/ClearOnOpen.svg?branch=master)](https://travis-ci.org/wolfposd/ClearOnOpen)
+
 
 
 # LICENSE
