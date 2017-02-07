@@ -12,10 +12,24 @@
  //
  //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
-
-#import "headerIOS9.h"
+#import "headerIOS910.h"
 #import "headerIOS78.h"
 #import "headerIOS6.h"
+#import "substrate.h"
+
+// =============================================================================
+//                                   iOS10
+// =============================================================================
+%group iOS10
+    %hook SPUISearchViewController
+
+        - (bool)clearSearchFieldAfterDismissal
+        {
+            return YES;
+        }
+
+    %end // hook SPUISearchViewController
+%end // group iOS10
 
 
 // =============================================================================
@@ -102,12 +116,16 @@
 
 %ctor 
 {
-    float sysVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
-    if(sysVersion >= 9.0)
+    //float sysVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+    if(kCFCoreFoundationVersionNumber >= 1300)
+    {
+        %init(iOS10);
+    }
+    else if(kCFCoreFoundationVersionNumber >= 1200)
     {
         %init(iOS9);
     }
-    else if (sysVersion >= 7.0) 
+    else if (kCFCoreFoundationVersionNumber >= 847) 
     {
         %init(iOS7);
     } 
