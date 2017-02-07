@@ -11,4 +11,6 @@ before_install:
 
 install: true
 
-script: make package
+script: 
+  - sed -i -- 's/-Zlzma/-Zgzip/g' theos/makefiles/package/deb.mk
+  - make package messages=yes
